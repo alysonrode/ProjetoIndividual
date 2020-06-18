@@ -1,0 +1,114 @@
+<div id="upper">
+    <form name="frmBuscaUsuarios">
+        <label for="buscarUsuarios">Buscar</label>
+        <input type="text" id="buscarUsuarios" name="buscarUsuarios">
+        <button type=button class="btn btn-outline-dark" onclick="buscar()">Buscar</button>
+    </form>
+    <a href="#" onclick="cadastroUsuario()" id="cadastroUsuario" class="btn btn-outline-dark">Cadastrar usuário</a>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="main-box clearfix">
+                <div class="table-responsive">
+                    <table class="table user-list">
+                        <thead>
+                        <tr>
+                            <th><span>Usuário</span></th>
+                            <th> Nível</th>
+                            <th><span>Status</span></th>
+                            <th><span>Email</span></th>
+                            <th>Ações</th>
+                        </tr>
+                        </thead>
+                        <tbody id="listaUsuários">
+                        <tr>
+                            <td>
+                                <span>Mila Kunis</span>
+                            </td>
+                            <td>
+                                <span>Admin</span>
+                            </td>
+                            <td>
+                                <span>Inactive</span>
+                            </td>
+                            <td>
+                                <span>mila@kunis.com</span>
+                            </td>
+                            <td>
+                                <a href="#" class="table-link">
+									<span class="fa-stack">
+										<i class="fa fa-search-plus"></i>
+									</span>
+                                </a>
+                                <a href="#" class="table-link">
+									<span class="fa-stack">
+										<i class="fa fa-pencil"></i>
+									</span>
+                                </a>
+                                <a href="#" class="table-link danger">
+									<span class="fa-stack">
+										<i class="fa fa-trash-o"></i>
+									</span>
+                                </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="modalCadastroUsuário">
+    <form name="frmCadastraUsuario">
+        <label>Nome</label>
+        <div class="row">
+            <div class="col-xs-6 col-sm-6 col-md-6">
+                <div class="form-group">
+                    <input type="text" name="first_name" id="first_name" class="form-control input-sm" placeholder="Primeiro Nome">
+                </div>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-6">
+                <div class="form-group">
+                    <input type="text" name="last_name" id="last_name" class="form-control input-sm" placeholder="Último Nome">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="emailUsuario">E-mail</label>
+            <input type="email" class="form-control" name="emailUsuario" id="emailUsuario" placeholder="example@hotmail.com">
+        </div>
+        <label>Senha</label>
+        <div class="row">
+            <div class="col-xs-6 col-sm-6 col-md-6">
+                <div class="form-group">
+                    <input type="password" name="password" id="password"
+                           class="form-control input-sm" placeholder="Senha">
+                </div>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-6">
+                <div class="form-group">
+                    <input type="password" name="password_confirmation" id="password_confirmation"
+                           class="form-control input-sm" placeholder="Confirme sua senha">
+                </div>
+            </div>
+        </div>
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="administrador" name="adminstrador">
+            <label class="form-check-label" for="administrador">Usuário é administrador?</label>
+        </div>
+        <div class="form-group row">
+            <label for="matricula" class="col-sm-2 col-form-label">Matrícula:</label>
+            <div class="col-sm-10">
+                <input type="text" readonly class="form-control-plaintext" id="matricula" name="matricula" value="##">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="matricula" class="col-sm-2 col-form-label">Data de Nascimento:</label>
+            <div class="col-sm-10">
+                <input type="date" class="form-control-plaintext" id="dataNasc" name="dataNasc">
+            </div>
+        </div>
+    </form>
+</div>

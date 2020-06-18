@@ -1,0 +1,11 @@
+.login{
+    height: 200px;
+    width: 400px;
+    position: absolute;
+    left: 36%;
+    top: 10%;
+}
+#forgotpwd{
+    opacity: 60%;
+    font-size: 12px;
+}
