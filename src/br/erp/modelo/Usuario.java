@@ -8,6 +8,15 @@ public class Usuario {
     private String senha;
     private boolean administrador;
     private String dataNasc;
+    private int id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getFirstName() {
         return firstName;
