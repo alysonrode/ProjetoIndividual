@@ -6,20 +6,22 @@
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="css/login.css">
+    <script src="js/login.js"></script>
+
 </head>
 <body>
 <div class="login">
 <div class="card">
     <article class="card-body">
-        <h1 class="card-title text-center mt-1">ERP</h1>
+        <h1 class="card-title text-center mt-1">ODIN</h1>
         <p class="text-center" id="facaseulogin">FAÇA SEU LOGIN</p>
-        <form>
+        <form name="input" method="post" action="login" onsubmit="converteSenha()">
             <div class="form-group">
                 <div class="input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text"> <i class="fa fa-user"></i> </span>
                     </div>
-                    <input name="" class="form-control" placeholder="Matrícula" type="code">
+                    <input name="login" class="form-control" placeholder="E-mail ou mátricula" type="code">
                 </div>
             </div>
             <div class="form-group">
@@ -27,7 +29,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
                     </div>
-                    <input class="form-control" placeholder="******" type="password">
+                    <input name="senha" class="form-control" placeholder="******" type="password">
                 </div>
             </div>
             <p class="text-center"><a href="#" class="btn" id="forgotpwd">Esqueceu sua senha?</a></p>

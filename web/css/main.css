@@ -73,9 +73,22 @@ header nav{
 #upper{
     margin-bottom: 2%;
 }
-#modalUsuarios, #modalExclusao{
+#modalUsuarios, #modalExclusao, #modalAtivacao{
     display: none;
 }
+#buscarUsuarios{
+    margin-left: 1%;
+    margin-right: 0.5%;
+}
+#dataNascLabel {
+    margin-left: 2%;
+    margin-top: 1%;
+}
+#dataNasc {
+    left: 8%;
+    width: 100%;
+}
+
 #acoes{
     padding-left: 3%;
 }

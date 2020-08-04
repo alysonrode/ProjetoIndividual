@@ -9,6 +9,15 @@ public class Usuario {
     private boolean administrador;
     private String dataNasc;
     private int id;
+    private boolean inativado;
+
+    public boolean isInativado() {
+        return inativado;
+    }
+
+    public void setInativado(boolean inativado) {
+        this.inativado = inativado;
+    }
 
     public int getId() {
         return id;

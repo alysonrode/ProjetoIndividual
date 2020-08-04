@@ -36,14 +36,15 @@ public class UsuariosREST extends UtilRest {
     }
     @GET
     @Path("/buscar")
+    @Consumes("application/*")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response buscarUsuario(@QueryParam("valorBusca") String busca){
+    public Response buscarUsuario(@QueryParam("filtro") String filtro, @QueryParam("onlyActive") boolean onlyActive){
 
         List<Usuario> listUsers = new ArrayList<Usuario>();
         Conexao conec = new Conexao();
         Connection conexao = conec.abrirConexao();
         JDBCUsuarioDAO jdbcUsuarioDAO = new JDBCUsuarioDAO(conexao);
-        listUsers = jdbcUsuarioDAO.buscar(busca);
+        listUsers = jdbcUsuarioDAO.buscar(filtro, onlyActive);
         conec.fecharConexao();
 
         return this.buildResponse(listUsers);
@@ -95,7 +96,7 @@ public class UsuariosREST extends UtilRest {
     @GET
     @Path("/deletaUsuario")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deletaUsuaruis(@QueryParam("id") int id){
+    public Response deletaUsuarios(@QueryParam("id") int id){
         Conexao conec = new Conexao();
         Connection conexao = conec.abrirConexao();
         JDBCUsuarioDAO jdbcUsuarioDAO = new JDBCUsuarioDAO(conexao);
@@ -106,5 +107,27 @@ public class UsuariosREST extends UtilRest {
         else{
             return this.buildErrorResponse("Erro em inativar o usuário, contate o administrador!");
         }
+    }
+    @GET
+    @Path("/ativaUsuario")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response ativaUsuarios(@QueryParam("id") int id){
+        Conexao conec = new Conexao();
+        Connection conexao = conec.abrirConexao();
+        JDBCUsuarioDAO jdbcUsuarioDAO = new JDBCUsuarioDAO(conexao);
+        boolean ok = jdbcUsuarioDAO.ativaUsuario(id);
+        if (ok){
+            return this.buildResponse("Usuário ativado com sucesso!");
+        }
+        else{
+            return this.buildErrorResponse("Erro em ativar o usuário, contate o administrador!");
+        }
+    }
+    public Usuario getUserForSession(String login){
+        Conexao conec = new Conexao();
+        Connection conexao = conec.abrirConexao();
+        JDBCUsuarioDAO jdbcUsuarioDAO = new JDBCUsuarioDAO(conexao);
+        Usuario usuario = jdbcUsuarioDAO.getUserForSession(login);
+        return usuario;
     }
 }

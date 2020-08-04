@@ -4,6 +4,7 @@ cadastroUsuario = function () {
         type: "POST",
         url: "/ERP/rest/usuarios/buscaid",
         success : function(id){
+            document.getElementById("frmUsuario").reset()
             document.frmUsuario.matricula.value = id;
             var modalCadastraUsuario = {
                 height: 550,
@@ -114,11 +115,13 @@ registraAtualizacao = function(user){
 }
 
 buscar = function () {
-    var busca = document.getElementById("buscarUsuarios").value;
+        filtro = document.getElementById("buscarUsuarios").value
+        onlyActive = document.getElementById("activeUsersOnly").checked
+
     $.ajax({
         type: "GET",
         url: "/ERP/rest/usuarios/buscar",
-        data: "valorBusca=" +busca,
+        data: "filtro=" +filtro + "&onlyActive=" + onlyActive,
         success: function (listUsers) {
              $("#tabelaUsuarios").html(
                     montaHtml(listUsers))
@@ -139,9 +142,13 @@ montaHtml = function (Usuarios) {
             if (Usuarios[i].administrador){
                 admin = "Administrador"
             }
+            var ativo = "Ativo"
+            if(Usuarios[i].inativado){
+                ativo = "Inativo"
+            }
             table += "<tr>" + "<td>" + "<span>" + Usuarios[i].firstName + " " + Usuarios[i].lastName + "</span>" + "</td>"
                    + "<td>" + "<span>" + admin + "</span>" + "</td>"
-                   + "<td>" + "<span>" + "Ativo" + "</span>" + "</td>"
+                   + "<td>" + "<span>" + ativo + "</span>" + "</td>"
                    + "<td>" + "<span>" + Usuarios[i].email + "</span>" + "</td>"
                    + "<input type='hidden' value='" + Usuarios[i].id + "' id='idUsuario='"+Usuarios[i].id + "></input>" + "<td>\n" +
 
@@ -150,13 +157,25 @@ montaHtml = function (Usuarios) {
             "\t\t\t\t\t\t\t\t\t<span class=\"fa-stack\">\n" +
             "\t\t\t\t\t\t\t\t\t\t<i class=\"fa fa-pencil\" onclick='AtualizaUsuario("+ Usuarios[i].id +")'></i>\n" +
             "\t\t\t\t\t\t\t\t\t</span>\n" +
-            "</a>\n" +
-            "<a href=\"#\" class=\"table-link danger\">\n" +
-            "\t\t\t\t\t\t\t\t\t<span class=\"fa-stack\">\n" +
-            "\t\t\t\t\t\t\t\t\t\t<i class=\"fa fa-trash-o\"onclick='deletarUsuario("+ Usuarios[i].id + ")'></i>\n" +
-            "\t\t\t\t\t\t\t\t\t</span>\n" +
-            "</a>\n" +
-            "</td>"
+            "</a>\n"
+            if(Usuarios[i].inativado) {
+                table +=
+                "<a href=\"#\" class=\"table-link danger\">\n" +
+                "\t\t\t\t\t\t\t\t\t<span class=\"fa-stack\">\n" +
+                "\t\t\t\t\t\t\t\t\t\t<i class=\"fa fa-plus-square-o\"onclick='ativaUsuario(" + Usuarios[i].id + ")'></i>\n" +
+                "\t\t\t\t\t\t\t\t\t</span>\n" +
+                "</a>\n" +
+                "</td>"
+            }
+            else{
+                table +=
+                    "<a href=\"#\" class=\"table-link danger\">\n" +
+                    "\t\t\t\t\t\t\t\t\t<span class=\"fa-stack\">\n" +
+                    "\t\t\t\t\t\t\t\t\t\t<i class=\"fa fa-trash-o\"onclick='deletarUsuario(" + Usuarios[i].id + ")'></i>\n" +
+                    "\t\t\t\t\t\t\t\t\t</span>\n" +
+                    "</a>\n" +
+                    "</td>"
+            }
 
             + "</tr>"
         }
@@ -235,4 +254,34 @@ deletarUsuario = function (id) {
         }
     }
     $("#modalExclusao").dialog(modalConfirmacao)
+}
+ativaUsuario = function (id) {
+    var modalConfirmacao={
+        title: "Confirmação",
+        height: 250,
+        width: 400,
+        modal: true,
+        buttons: {
+            "SIM": function(){
+                $.ajax({
+                    url:"/ERP/rest/usuarios/ativaUsuario",
+                    type: "GET",
+                    data: "id=" +id,
+                    success: function (msg) {
+                        buscar()
+                        exibirAviso(msg)
+                    },
+                    error : function (msg) {
+                        exibirAviso(msg)
+                    }
+                })
+
+                $(this).dialog("close");
+            },
+            "NÃO": function () {
+                $(this).dialog("close");
+            }
+        }
+    }
+    $("#modalAtivacao").dialog(modalConfirmacao)
 }
