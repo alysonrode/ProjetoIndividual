@@ -3,11 +3,13 @@ package br.erp.jdbc;
 import br.erp.login.PasswordUtils;
 import br.erp.login.ValidaUsuario;
 import br.erp.modelo.Usuario;
+import com.mysql.cj.x.protobuf.MysqlxPrepare;
 
 import javax.swing.plaf.nimbus.State;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class JDBCUsuarioDAO {
     private Connection conexao;
@@ -305,5 +307,19 @@ public class JDBCUsuarioDAO {
             return usuario;
         }
     return usuario;
+    }
+    public boolean checkEmail(String email){
+        String sql = "select * from Usuario where email = '" +email + "';";
+        try {
+            Statement stmt = conexao.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            if(rs.next()){
+                return false;
+            }
+            return true;
+        }catch (Exception e ){
+            e.printStackTrace();
+            return false;
+        }
     }
 }

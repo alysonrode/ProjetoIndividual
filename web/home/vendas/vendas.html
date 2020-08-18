@@ -2,7 +2,7 @@
 <a href="#" onclick="carregaHistoricoVendas()" class="btn btn-outline-dark"> Histórico de Vendas </a>
 
 <fieldset id="vendasContent" class="border border-secondary">
-    <form>
+    <form id="formVendas">
         <div class="form-group row">
             <label for="staticDate" class="col-sm-2 col-form-label">Data Atual</label>
             <div class="col-sm-10">
@@ -11,28 +11,34 @@
         </div>
         <div class="form-group row">
             <div class="form-row inputsCadastro">
-                <div>
+                <div id="produtoVenda">
                     <label for="inputProduto">Produto</label>
                     <input type="text" class="form-control" id="inputProduto" placeholder="Nome do prod ou id">
                 </div>
-                <div>
+                <div id="quantidadeVenda">
                     <label for="inputQuantidade">Quantidade</label>
                     <input type="number" class="form-control" id="inputQuantidade" placeholder="Quantidade">
                 </div>
-                <div>
+                <div id="valorUnitVenda">
                     <label for="inputValorUnit">Valor Unit.</label>
                     <input type="text" class="form-control" id="inputValorUnit" placeholder="R$####,00">
                 </div>
-                <div>
+                <div id="valorTotalVenda">
                     <label for="inputValorTotal">Valor Total</label>
-                    <input type="password" class="form-control" id="inputValorTotal" placeholder="R$####,00">
+                    <input type="password" class="form-control" id="inputValorTotal">
                 </div>
             </div>
-            <div id="icons">
-                 <img class="icons" src="/ERP/imagens/plusIcon.jpg">
-                 <img class="icons"  src="/ERP/imagens/editIcon.jpeg">
+            <div class="iconsClass">
+                 <img class="icons" onclick="createLine()" src="/ERP/imagens/plusIcon.jpg">
+                 <img class="icons" src="/ERP/imagens/editIcon.jpeg">
                  <img class="icons" src="/ERP/imagens/trashIcon.png">
             </div>
         </div>
+
     </form>
+    <a href="#" onclick="" class="btn btn-outline-success acoes">Realizar venda</a>
+    <a href="#" onclick="" class="btn btn-outline-danger acoes">Cancelar</a>
+
 </fieldset>
+
+

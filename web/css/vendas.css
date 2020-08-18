@@ -2,25 +2,44 @@ fieldset{
     width: 100%;
     height: 90%;
     padding: 5%;
+    overflow-y: auto;
 }
 .inputsCadastro input{
     width: 100%;
     margin-right: 23px;
     height: 40%;
 }
-#icons{
+.inputsCadastro2 input{
+     width: 100%;
+     margin-right: 23px;
+     height: 80%;
+ }
+.iconsClass{
     width: 6%;
     height: 50%;
-    margin-top: 30px;
+    margin-top: 32px;
+    margin-left: 9px;
+}
+.iconsClass2{
+    width: 6%;
+    height: 50%;
     margin-left: 9px;
 }
 .icons{
     width: 25%;
     height: 25%;
+    cursor: pointer;
+}
+.icons2{
+    margin-right: 5px;
 }
 .iconsHistoric{
     width: 10%;
 }
 td{
     width: 20%;
+}
+.acoes{
+    float: right;
+    margin-right: 1%;
 }

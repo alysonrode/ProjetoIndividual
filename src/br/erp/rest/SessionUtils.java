@@ -18,7 +18,7 @@ public class SessionUtils extends HttpServlet {
     @Path("/isAdmin")
     @POST
     @Produces("*/*")
-    public Response isAdmin(){
+    public Response isAdmin() {
 
         HttpSession session = ((HttpServletRequest) request).getSession();
         Object admin = session.getAttribute("admin");
@@ -27,10 +27,11 @@ public class SessionUtils extends HttpServlet {
         return UR.buildResponse(Boolean.parseBoolean(adminConvert));
 
     }
+
     @Path("/getName")
     @POST
     @Produces("*/*")
-    public Response getName(){
+    public Response getName() {
 
         HttpSession session = ((HttpServletRequest) request).getSession();
         Object name = session.getAttribute("name");
@@ -38,6 +39,41 @@ public class SessionUtils extends HttpServlet {
         UtilRest UR = new UtilRest();
         return UR.buildResponse(nameConverted);
 
+    }
+
+    @Path("/logout")
+    @POST
+    @Produces("*/*")
+    public Response logout() {
+
+        UtilRest UR = new UtilRest();
+
+        try {
+            HttpSession session = ((HttpServletRequest) request).getSession();
+            session.invalidate();
+            return UR.buildResponse("Sessão encerrada.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return UR.buildErrorResponse("Ocorrou um erro ao encerrar sessão.");
+        }
+
+
+    }
+
+    @Path("/checkSession")
+    @POST
+    @Produces("*/*")
+    public Response checkSession(){
+
+        UtilRest UR = new UtilRest();
+
+        HttpSession session = ((HttpServletRequest) request).getSession();
+        if (session == null){
+            return UR.buildResponse(false);
+        }
+        else{
+            return UR.buildResponse(true);
+        }
     }
 
 }

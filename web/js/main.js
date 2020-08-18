@@ -1,15 +1,24 @@
 Usuario = new Object();
 
+checkSession = function(){
+    $.ajax({
+        url: "/ERP/rest/SessionUtils/checkSession",
+        type: "POST",
+        success : function (SessionOk) {
+            if (SessionOk == false){location.reload()}
+        }
+    })
+}
+
 isAdmin = function(){
 
     $.ajax({
         url: "/ERP/rest/SessionUtils/isAdmin",
         type: "POST",
         success : function (admin) {
-            console.log(admin);
             Usuario.isAdmin = admin;
             getName()
-            admin == true ? loadAdmin() : loadNormalUser();
+            admin == "true" ? loadAdmin() : loadNormalUser();
         }
     })
 }
@@ -18,40 +27,63 @@ getName = function(){
         url: "/ERP/rest/SessionUtils/getName",
         type: "POST",
         success : function (name) {
-            document.getElementById("botaoUsuario").innerHTML = "<img src=\"../imagens/userIcon.png\" id=\"imgHeader\"> " + name.replaceAll('"', "")
+            document.getElementById("botaoUsuario").innerHTML =
+                "<img src=\"../imagens/userIcon.png\" id=\"imgHeader\"> " +
+                name.replaceAll('"', "")
+        }
+    })
+}
+logout = function(){
+
+    $.ajax({
+        url: "/ERP/rest/SessionUtils/logout",
+        type: "POST",
+        success : function (msg) {
+            location.reload();
+        },
+        error : function (msg) {
+            location.reload();
+            exibirAviso(msg)
         }
     })
 }
 
 $(document).ready(function(){
     isAdmin()
+})
     loadAdmin = function () {
         $("#Content").load("/ERP/home/main/main.html");
 
         $("#sidebar").load("/ERP/home/sidebar/sidebar.html");
 
             carregaPrincipal = function(){
+                checkSession()
                 $("#Content").load("/ERP/home/main/main.html")
             }
             carregaVendas = function () {
+                checkSession()
                 $("#Content").load("/ERP/home/vendas/vendas.html")
             }
             carregaEstoque = function () {
+                checkSession()
                 $("#Content").load("/ERP/home/estoque/estoque.html")
             }
             carregaRelatorios = function () {
+                checkSession()
                 $("#Content").load("/ERP/home/relatorios/relatorios.html")
             }
             carregaHistoricoVendas = function () {
+                checkSession()
                 $("#vendasContent").load("/ERP/home/vendas/historicoVendas.html")
             }
             carregaUsuarios = function (){
+                checkSession()
                 $("#Content").load("/ERP/home/usuarios/main.html")
             }
     }
 
-    loadNormalUser = function (){
-        $("#Content").load("/ERP/vendedor/index.html")
+   loadNormalUser = function (){
+       $("#Content").load("/ERP/vendedor/index.html")
     }
 
 
@@ -71,4 +103,4 @@ $(document).ready(function(){
             $("#modalAviso").dialog(modal);
         };
 
-})
+

@@ -34,19 +34,15 @@ cadastroUsuario = function () {
 validaSenha = function () {
     var senha = document.frmUsuario.password.value;
     var confirmacaoSenha = document.frmUsuario.password_confirmation.value;
-    var authentication;
 
     if (senha == confirmacaoSenha) {
         return true;
     }
     else {
-        var modalSenhaIncopativeis = {
-            height: 150,
-            width: 500,
-            modal: true,
-        }
+
         exibirAviso("As senhas são incompatíveis!");
         return false;
+
     }
 }
 validaCampos = function (atualizar) {
@@ -59,6 +55,8 @@ validaCampos = function (atualizar) {
     user.administrador = document.frmUsuario.adminstrador.checked;
     user.dataNasc = document.frmUsuario.dataNasc.value;
     user.id = document.frmUsuario.matricula.value;
+
+    if(validaEmail(user.email) == false) { return false; }
 
     if((user.firstName == "") || (user.lastName == "") || (user.email == "")){
         exibirAviso("Preencha todos os campos!");
@@ -75,6 +73,7 @@ validaCampos = function (atualizar) {
     }
     else{
         var senhaValida = validaSenha()
+
         if (senhaValida){
             if (atualizar){
                 registraAtualizacao(user)
@@ -84,6 +83,24 @@ validaCampos = function (atualizar) {
             return true;
         }
     }
+}
+validaEmail = function(email){
+    $.ajax({
+            url: "/ERP/rest/usuarios/CheckEmail",
+            type: "POST",
+            data: email,
+            success : function (msg) {
+
+                if(msg === "Ok!"){
+                    return true;
+                }
+                else{
+                    exibirAviso(msg);
+                    return false;
+                }
+
+            }
+        })
 }
 
 cadastrar = function(user){
@@ -186,7 +203,6 @@ montaHtml = function (Usuarios) {
 }
 
 AtualizaUsuario = function(id){
-    console.log(id)
     $.ajax({
         type: "GET",
         url: "/ERP/rest/usuarios/buscaPorId",
@@ -210,10 +226,10 @@ AtualizaUsuario = function(id){
                     "Salvar": function () {
                         var actualizes = true
                         var result = validaCampos(actualizes)
-                        if (result)
+                        if (result) {
                             $(this).dialog("close")
                             document.getElementById("frmUsuario").reset()
-
+                        }
                     },
                     "Cancelar": function () {
                         document.getElementById("frmUsuario").reset()

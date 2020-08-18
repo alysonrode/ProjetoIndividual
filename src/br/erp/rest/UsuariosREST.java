@@ -124,10 +124,36 @@ public class UsuariosREST extends UtilRest {
         }
     }
     public Usuario getUserForSession(String login){
+
         Conexao conec = new Conexao();
         Connection conexao = conec.abrirConexao();
         JDBCUsuarioDAO jdbcUsuarioDAO = new JDBCUsuarioDAO(conexao);
+
         Usuario usuario = jdbcUsuarioDAO.getUserForSession(login);
         return usuario;
+    }
+    @Path("/CheckEmail")
+    @POST
+    @Consumes("Application/*")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response validateEmail(String email){
+
+        Conexao conec = new Conexao();
+        Connection conexao = conec.abrirConexao();
+        JDBCUsuarioDAO jdbcUsuarioDAO = new JDBCUsuarioDAO(conexao);
+
+        boolean testRegex = email.matches("\\S+@\\S+\\.\\S+");
+
+        if(!testRegex){
+            return this.buildResponse("Formato de e-mail inválido.");
+        }
+
+        boolean ok = jdbcUsuarioDAO.checkEmail(email);
+        if (ok){
+            return this.buildResponse("Ok!");
+        }
+        else{
+            return this.buildResponse("E-mail já existente!");
+        }
     }
 }
