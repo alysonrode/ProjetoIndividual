@@ -67,7 +67,7 @@ public class SessionUtils extends HttpServlet {
 
         UtilRest UR = new UtilRest();
 
-        HttpSession session = ((HttpServletRequest) request).getSession();
+        HttpSession session = ((HttpServletRequest) request).getSession(false);
         if (session == null){
             return UR.buildResponse(false);
         }

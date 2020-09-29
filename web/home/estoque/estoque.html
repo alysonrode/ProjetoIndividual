@@ -1,1 +1,54 @@
-<H1>ESTOQUE</H1>
+<div CLASS="headerProducts">
+    <a href="#" onclick="cadastraProduto()" class="btn btn-outline-dark">Cadastrar produto</a>
+    Buscar: <input type="text" id="buscaProduto" onkeypress="getProducts()" class="outline-dark"/>
+</div>
+<fieldset id="productsContent" class="border border-secondary">
+    <table id="tabelaProduto" class="table">
+    </table>
+</fieldset>
+
+<div id="modalProduto">
+    <form name="frmProduto" id="frmProduto">
+        <label>Nome</label>
+        <div class="row">
+            <div class="col-xs-6 col-sm-10 col-md-10">
+                <div class="form-group">
+                    <input type="text" name="nomeProduto" id="nomeProduto" class="form-control input-sm" placeholder="Produto">
+                </div>
+            </div>
+        </div>
+        <label>Marca</label>
+        <div class="row">
+            <div class="col-xs-6 col-sm-10 col-md-10">
+                <div class="form-group">
+                    <input type="text" name="marcaProduto" id="marcaProduto" class="form-control input-sm">
+                </div>
+            </div>
+        </div>
+        <label>Quantidade</label>
+        <div class="row">
+            <div class="col-xs-6 col-sm-10 col-md-10">
+                <div class="form-group">
+                    <input type="number" name="quantidade" id="quantidade" class="form-control input-sm">
+                </div>
+            </div>
+        </div>
+        <label>Valor</label>
+        <div class="row">
+            <div class="col-xs-6 col-sm-10 col-md-10">
+                <div class="form-group">
+                    <input type="text" name="valor" id="valor" class="form-control input-sm din" mask="">
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="idProduto" class="col-sm-1 col-form-label">ID:</label>
+            <div class="col-sm-2">
+                <input type="text" readonly class="form-control-plaintext" id="idProduto" name="idProduto">
+            </div>
+        </div>
+    </form>
+</div>
+<div id="modalExclusaoProduto">Tem certeza que dejesa excluir?</div>
+<script>getProducts()</script>
+<script src="https://igorescobar.github.io/jQuery-Mask-Plugin/js/jquery.mask.min.js"></script>

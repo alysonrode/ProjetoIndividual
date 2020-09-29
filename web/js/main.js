@@ -5,7 +5,8 @@ checkSession = function(){
         url: "/ERP/rest/SessionUtils/checkSession",
         type: "POST",
         success : function (SessionOk) {
-            if (SessionOk == false){location.reload()}
+            console.log(SessionOk)
+            if (SessionOk === false){location.reload()}
         }
     })
 }

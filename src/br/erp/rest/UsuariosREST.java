@@ -25,6 +25,7 @@ public class UsuariosREST extends UtilRest {
         Connection conexao = conec.abrirConexao();
         JDBCUsuarioDAO usuarioDAO = new JDBCUsuarioDAO(conexao);
         boolean isOk = usuarioDAO.cadastrar(usuario);
+        conec.fecharConexao();
         if(isOk){
             return this.buildResponse("Usuários cadastrado com sucesso!");
         }
@@ -86,6 +87,7 @@ public class UsuariosREST extends UtilRest {
         Connection conexao = conec.abrirConexao();
         JDBCUsuarioDAO jdbcUsuarioDAO = new JDBCUsuarioDAO(conexao);
         boolean ok = jdbcUsuarioDAO.atualizaUsuario(usuario);
+        conec.fecharConexao();
         if (ok){
             return this.buildResponse("Usuário atualizado com sucesso!");
         }
@@ -101,6 +103,7 @@ public class UsuariosREST extends UtilRest {
         Connection conexao = conec.abrirConexao();
         JDBCUsuarioDAO jdbcUsuarioDAO = new JDBCUsuarioDAO(conexao);
         boolean ok = jdbcUsuarioDAO.deletaUsuario(id);
+        conec.fecharConexao();
         if (ok){
             return this.buildResponse("Usuário inativado com sucesso!");
         }
@@ -116,6 +119,7 @@ public class UsuariosREST extends UtilRest {
         Connection conexao = conec.abrirConexao();
         JDBCUsuarioDAO jdbcUsuarioDAO = new JDBCUsuarioDAO(conexao);
         boolean ok = jdbcUsuarioDAO.ativaUsuario(id);
+        conec.fecharConexao();
         if (ok){
             return this.buildResponse("Usuário ativado com sucesso!");
         }
@@ -130,6 +134,7 @@ public class UsuariosREST extends UtilRest {
         JDBCUsuarioDAO jdbcUsuarioDAO = new JDBCUsuarioDAO(conexao);
 
         Usuario usuario = jdbcUsuarioDAO.getUserForSession(login);
+        conec.fecharConexao();
         return usuario;
     }
     @Path("/CheckEmail")
@@ -149,6 +154,7 @@ public class UsuariosREST extends UtilRest {
         }
 
         boolean ok = jdbcUsuarioDAO.checkEmail(email);
+        conec.fecharConexao();
         if (ok){
             return this.buildResponse("Ok!");
         }
@@ -156,4 +162,6 @@ public class UsuariosREST extends UtilRest {
             return this.buildResponse("E-mail já existente!");
         }
     }
+
+
 }

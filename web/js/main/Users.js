@@ -26,7 +26,6 @@ cadastroUsuario = function () {
             }
             $("#modalUsuarios").dialog(modalCadastraUsuario);
 
-
         }
     })
 
