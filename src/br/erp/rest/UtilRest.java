@@ -36,8 +36,7 @@ public class UtilRest {
 //		juntamente com a String contendo a mensagem de erro
 
         return rb.build();
-
-
     }
+
 }
 

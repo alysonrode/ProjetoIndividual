@@ -50,7 +50,6 @@ selecionaProduto = function(id, nome, marca, valor, idProduto){
 
     var produtoString = nome + "-" + marca;
     document.getElementById(id).value = produtoString;
-    console.log("idProduto"+id.replace("inputProduto","") + " " + idProduto)
     document.getElementById("idProduto"+id.replace("inputProduto","")).value = idProduto;
 
     idValor = "inputValorUnit" + id.replace("inputProduto","");
@@ -106,14 +105,13 @@ productLine = function () {
     var inputProduto = document.createElement('input')
     inputProduto.setAttribute('type','text')
     inputProduto.setAttribute('readonly', '')
-    inputProduto.setAttribute('value','Mostrar produtos')
+    inputProduto.setAttribute('placeholder','Mostrar produtos')
     inputProduto.setAttribute('class','form-control inputsProduto')
     inputProduto.setAttribute('id','inputProduto' + count)
-    inputProduto.setAttribute('placeholder','Nome ou id do prod.')
     inputProduto.setAttribute('onclick', 'showProducts(\"inputProduto'+count +'\")')
     var inputIdProduto = document.createElement('input')
     inputIdProduto.setAttribute('type', 'text')
-    inputIdProduto.setAttribute('id','idProduto')
+    inputIdProduto.setAttribute('id','idProduto' + count)
     inputIdProduto.setAttribute('hidden','')
     inputIdProduto.setAttribute('value','')
     var divQuantidade = document.createElement('div')
@@ -167,6 +165,7 @@ productLine = function () {
     divSub.appendChild(divQuantidade)
     divSub.appendChild(divValorUnit)
     divSub.appendChild(divValorTotal)
+    divSub.appendChild(inputIdProduto)
 
 
     var html = document.createElement("div")
@@ -200,8 +199,8 @@ pegaDataAtual = function () {
 
     var day = today.getDate().toString().length < 2 ? "0" + today.getDate() : today.getDate()
 
-    var month = today.getMonth().toString().length < 2 ? "0"+ (today.getMonth() + 1): (today.getMonth() + 1)
-
+    var month = (today.getMonth() + 1).toString().length < 2 ? "0"+ (today.getMonth() + 1): (today.getMonth() + 1)
+    
     dataString = day + "/" + month + "/" + today.getFullYear();
 
     document.getElementById('staticDate').value = dataString;
@@ -217,13 +216,20 @@ prepareSell = function () {
         var produto = 'produto' + (i + 1)
         linha = {
             produto: document.getElementById("inputProduto" + (i + 1)).value,
-            quantidade: document.getElementById("inputQuantidade" + (i + 1)).value
+            quantidade: document.getElementById("inputQuantidade" + (i + 1)).value,
+            idProduto: document.getElementById("idProduto"+(i+1)).value
         }
         sell.push(linha);
     }
-
-    cadastraVenda(sell)
-
+    if(!validaVendas()){
+        exibirAviso("Campo inválido.")
+    }
+    if(!validaQuantidade(lastId)){
+        exibirAviso("Quantidade inválida")
+    }
+    else{
+        cadastraVenda(sell)
+    }
 }
 cadastraVenda = function (venda) {
     $.ajax({
@@ -237,4 +243,50 @@ cadastraVenda = function (venda) {
             exibirAviso(msg)
         }
     })
+}
+validaVendas = function () {
+    lastId = getId() - 1
+    for (i = 0; i < lastId; i++){
+        produto = document.getElementById("inputProduto" + (i + 1)).value
+        if(produto == "" || produto == undefined){
+            document.getElementById("inputProduto" + (i + 1)).focus();
+            return false;
+        }
+        quantidade = document.getElementById("inputQuantidade" + (i + 1)).value;
+        if(quantidade == "" || quantidade == undefined){
+            document.getElementById("inputQuantidade" + (i + 1)).focus();
+            return false;
+        }
+    }
+    return true;
+}
+validaQuantidade = function (lastId) {
+    listaIds = []
+    listaQuantidades = []
+    quantidadesEmVenda = []
+    for(i = 0; i < lastId; i++){
+        quantidade = document.getElementById("inputQuantidade" + (i + 1)).value;
+        idProduto = document.getElementById("idProduto"+(i+1)).value;
+        listaIds.push(idProduto);
+        quantidadesEmVenda.push(quantidade);
+    }
+    $.ajax({
+        url: "/ERP/rest/produtos/pegaQuantidade",
+        type: "POST",
+        data: JSON.stringify(listaIds),
+        success : function (listaQuantidadesRest) {
+            listaQuantidades = listaQuantidadesRest;
+        },
+        error : function () {
+            exibirAviso("Erro desconhecido, contate o administrador.")
+        }
+    })
+
+    for (i = 0; i < listaQuantidades.length; i++){
+        if(listaQuantidades[i] < quantidadesEmVenda[i]){
+            document.getElementById("idProduto"+(i+1)).focus();
+            return false;
+        }
+    }
+    return true;
 }

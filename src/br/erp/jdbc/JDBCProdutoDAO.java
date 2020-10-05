@@ -5,6 +5,7 @@ import br.erp.modelo.Usuario;
 import com.mysql.cj.x.protobuf.MysqlxPrepare;
 import com.mysql.cj.xdevapi.Result;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -135,6 +136,27 @@ public class JDBCProdutoDAO {
             e.printStackTrace();
         }
         return product;
+    }
+    public List<Integer> pegaQuantidades(List<Integer> ids){
+
+        String sql = "select quantidade from Produto where idProduto = ?;";
+        List<Integer> quantidades = new ArrayList<>();
+        PreparedStatement p;
+        try{
+            for(int id : ids){
+                p = conexao.prepareStatement(sql);
+
+                p.setInt(1,id);
+                ResultSet rs = p.executeQuery();
+                if(rs.next()){
+                    quantidades.add(rs.getInt("quantidade"));
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+        return quantidades;
     }
 
     public boolean updateProduct(Produto produto){

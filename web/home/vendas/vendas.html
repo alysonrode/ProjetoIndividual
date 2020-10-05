@@ -14,7 +14,7 @@
                 <div id="produtoVenda">
                     <label for="inputProduto1">Produto</label>
                     <input type="text" class="form-control  inputsProduto"
-                       onclick="showProducts('inputProduto1')"id="inputProduto1" value="Mostrar produtos" readonly>
+                       onclick="showProducts('inputProduto1')"id="inputProduto1" placeholder="Mostrar produtos" readonly>
                     <input type="text" hidden value="" id="idProduto1">
                     <!-- <a class="form-control inputsProduto" onclick="showProducts('inputProduto1')" id="inputProduto1">Mostrar produtos</a> -->
                 </div>
@@ -39,7 +39,7 @@
         </div>
     </form>
 </fieldset>
-<a href="#" onclick="" class="btn btn-success acoes">Realizar venda</a>
+<button onclick="prepareSell()" class="btn btn-success acoes">Realizar venda</button>
 <a href="#" onclick="" class="btn btn-outline-danger acoes">Cancelar</a>
 <div id="producsShowdown" class="modal"></div>
 

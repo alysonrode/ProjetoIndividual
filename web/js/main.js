@@ -1,14 +1,21 @@
 Usuario = new Object();
 
 checkSession = function(){
+    retorno = true;
     $.ajax({
         url: "/ERP/rest/SessionUtils/checkSession",
         type: "POST",
         success : function (SessionOk) {
-            console.log(SessionOk)
-            if (SessionOk === false){location.reload()}
+            if(SessionOk == "true"){
+                retorno = true;
+            }
+            else{
+                retorno = false;
+            }
+
         }
     })
+    return retorno;
 }
 
 isAdmin = function(){
@@ -58,28 +65,50 @@ $(document).ready(function(){
         $("#sidebar").load("/ERP/home/sidebar/sidebar.html");
 
             carregaPrincipal = function(){
-                checkSession()
-                $("#Content").load("/ERP/home/main/main.html")
+                console.log(checkSession())
+                if(checkSession()) {
+                    $("#Content").load("/ERP/home/main/main.html")
+                }else{
+                    location.reload()
+                }
             }
+
             carregaVendas = function () {
-                checkSession()
-                $("#Content").load("/ERP/home/vendas/vendas.html")
+                if(checkSession()){
+                    $("#Content").load("/ERP/home/vendas/vendas.html")
+                }else{
+                    location.reload()
+                }
+
             }
             carregaEstoque = function () {
-                checkSession()
-                $("#Content").load("/ERP/home/estoque/estoque.html")
+                if(checkSession()){
+                    $("#Content").load("/ERP/home/estoque/estoque.html")
+                }else{
+                    location.reload()
+                }
+
             }
             carregaRelatorios = function () {
-                checkSession()
-                $("#Content").load("/ERP/home/relatorios/relatorios.html")
+                if(checkSession() == true){
+                    $("#Content").load("/ERP/home/relatorios/relatorios.html")
+                }else{
+                    location.reload()
+                }
             }
             carregaHistoricoVendas = function () {
-                checkSession()
-                $("#vendasContent").load("/ERP/home/vendas/historicoVendas.html")
+                if(checkSession()){
+                    $("#vendasContent").load("/ERP/home/vendas/historicoVendas.html")
+                }else{
+                    location.reload()
+                }
             }
             carregaUsuarios = function (){
-                checkSession()
-                $("#Content").load("/ERP/home/usuarios/main.html")
+                if(checkSession()){
+                    $("#Content").load("/ERP/home/usuarios/main.html")
+                }else{
+                    location.reload()
+                }
             }
     }
 
