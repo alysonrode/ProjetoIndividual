@@ -11,10 +11,7 @@ import com.mysql.cj.x.protobuf.MysqlxExpr;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -63,7 +60,7 @@ public class VendasREST extends UtilRest {
     public Venda preparaVenda(List<Produto> produtos, Usuario user){
 
         Date date = new Date();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String dataAtual = simpleDateFormat.format(date);
 
         Venda venda = new Venda();
@@ -122,6 +119,23 @@ public class VendasREST extends UtilRest {
             produtos.add(produto);
         }
         return produtos;
+    }
+    @Path("/buscar")
+    @GET
+    @Consumes("Application/*")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response buscar(@QueryParam("busca") String busca){
+
+        Conexao conec = new Conexao();
+        Connection conexao = conec.abrirConexao();
+        JDBCVendasDAO vendasDAO = new JDBCVendasDAO(conexao);
+
+        List<Venda> vendas = vendasDAO.search(busca);
+
+        conec.fecharConexao();
+
+        return this.buildResponse(vendas);
+
     }
     
     

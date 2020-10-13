@@ -1,7 +1,7 @@
 fieldset{
     width: 100%;
     height: 87%;
-    padding: 5%;
+    padding: 4%;
     margin-bottom: 0.5%;
     overflow-y: auto;
 }
@@ -61,4 +61,11 @@ td{
     cursor: pointer;
     align-content: center;
     text-align: center;
+}
+.iconsHistoricVendas{
+    width: 10%;
+    height: 10%;
+    margin-right: 3%;
+    margin-left: 1px;
+    cursor: pointer;
 }

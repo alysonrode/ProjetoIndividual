@@ -173,6 +173,4 @@ deleteProcuct = function (id) {
         }
     }
     $("#modalExclusaoProduto").dialog(modaldeleteproduto);
-
-
 }

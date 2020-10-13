@@ -4,9 +4,15 @@ import br.erp.modelo.Produto;
 import br.erp.modelo.Venda;
 import javassist.bytecode.stackmap.BasicBlock;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 public class JDBCVendasDAO {
 
@@ -119,4 +125,79 @@ public class JDBCVendasDAO {
         }
         return id;
     }
+    public List<Venda> search(String busca){
+        String sql = "select * from Vendas v ";
+        List<Venda> sells = new ArrayList<>();
+        Venda venda = null;
+        if(!busca.equals("")){
+            if(isInt(busca)){
+                sql += "where v.idVenda = ?";
+            }
+            else if(isDate(busca)){
+                sql += "where v.dataVenda = ?";
+            }
+            else{
+                sql += "inner join Usuario u on " +
+                        "u.idUsuario = v.vendedor_id"+
+                        " where u.primeiroNome like ?";
+            }
+        }
+        sql += " order by v.dataVenda desc;";
+        PreparedStatement p;
+        try{
+            p = this.conec.prepareStatement(sql);
+            if(!busca.equals("")){
+                if(isInt(busca)){
+                    p.setInt(1, Integer.parseInt(busca));
+                }
+                else if(isDate(busca)){
+                    String[] str = busca.split("/");
+                    String dataFormated = str[2] + "/" + str[1] + "/" + str[0];
+                    p.setString(1, dataFormated);
+                }
+                else{
+                    p.setString(1, busca);
+                }
+            }
+
+            ResultSet rs = p.executeQuery();
+            while(rs.next()){
+
+                venda = new Venda();
+
+                JDBCUsuarioDAO jdbcUsuarioDAO = new JDBCUsuarioDAO(conec);
+                venda.setUsuario(jdbcUsuarioDAO.buscarPorId(rs.getInt("vendedor_id")));
+
+                Date data = rs.getDate("dataVenda");
+                String datavenda = (data.getDate() + 1) + "/" + (data.getMonth() + 1) + "/" + (data.getYear() + 1900);
+                venda.setDataVenda(datavenda);
+
+                venda.setValorTotal(rs.getDouble("valortotal"));
+                venda.setIdVenda(rs.getInt("idVenda"));
+
+                sells.add(venda);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return sells;
+    }
+    public boolean isInt(String value){
+        try{
+            Integer.parseInt(value);
+            return true;
+        }catch (NumberFormatException e){
+            return false;
+        }
+
+
+    }
+    public boolean isDate(String value){
+        if(value.matches("([0-9]{2})\\/([0-9]{2})\\/([0-9]{4})")){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
 }

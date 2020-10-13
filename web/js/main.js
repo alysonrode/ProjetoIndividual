@@ -90,13 +90,14 @@ $(document).ready(function(){
 
             }
             carregaRelatorios = function () {
-                if(checkSession() == true){
+                if(checkSession()){
                     $("#Content").load("/ERP/home/relatorios/relatorios.html")
                 }else{
                     location.reload()
                 }
             }
             carregaHistoricoVendas = function () {
+                disableButtons()
                 if(checkSession()){
                     $("#vendasContent").load("/ERP/home/vendas/historicoVendas.html")
                 }else{
@@ -112,6 +113,12 @@ $(document).ready(function(){
             }
     }
 
+    disableButtons = function (){
+        document.getElementById("botoesVenda").hidden = true;
+    }
+    enableButtons = function(){
+        document.getElementById("botoesVenda").hidden = false;
+    }
    loadNormalUser = function (){
        $("#Content").load("/ERP/vendedor/index.html")
     }
