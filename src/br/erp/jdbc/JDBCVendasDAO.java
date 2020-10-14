@@ -125,7 +125,7 @@ public class JDBCVendasDAO {
         }
         return id;
     }
-    public List<Venda> search(String busca){
+    public List<Venda> search(String busca, int minValue, int maxValue){
         String sql = "select * from Vendas v ";
         List<Venda> sells = new ArrayList<>();
         Venda venda = null;
@@ -142,7 +142,16 @@ public class JDBCVendasDAO {
                         " where u.primeiroNome like ?";
             }
         }
-        sql += " order by v.dataVenda desc;";
+        sql += " order by v.dataVenda desc";
+
+        if(minValue != -1 && maxValue != -1) {
+
+            sql += " limit " + minValue + "," + maxValue + ";";
+
+        }else{
+            sql += ";";
+        }
+
         PreparedStatement p;
         try{
             p = this.conec.prepareStatement(sql);

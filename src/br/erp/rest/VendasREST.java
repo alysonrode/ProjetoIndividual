@@ -124,13 +124,13 @@ public class VendasREST extends UtilRest {
     @GET
     @Consumes("Application/*")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response buscar(@QueryParam("busca") String busca){
+    public Response buscar(@QueryParam("busca") String busca, @QueryParam("minValue") int minValue, @QueryParam("maxValue") int maxValue){
 
         Conexao conec = new Conexao();
         Connection conexao = conec.abrirConexao();
         JDBCVendasDAO vendasDAO = new JDBCVendasDAO(conexao);
 
-        List<Venda> vendas = vendasDAO.search(busca);
+        List<Venda> vendas = vendasDAO.search(busca, minValue, maxValue);
 
         conec.fecharConexao();
 

@@ -295,16 +295,41 @@ validaQuantidades = function (listaQuantidades, quantidadesEmVenda) {
         }
     }
 }
-buscarVendas = function (pagina) {
+buscarVendas = function (pagina, minValue, maxValue, firstTime) {
     busca = document.getElementById("buscaVendas").value;
     $.ajax({
         url: "/ERP/rest/vendas/buscar",
         type: "GET",
-        data: "busca=" + busca,
+        data: "busca=" + busca +"&minValue=" + minValue + "&maxValue="+maxValue,
         success: function (listaVendas) {
-            $("#vendas").html(montaVendas(listaVendas, pagina))
+            if(firstTime){
+                calculePagination(listaVendas, pagina)
+            }else{
+                $("#vendas").html(montaVendas(listaVendas, pagina))
+            }
         }
     })
+
+}
+
+calculePagination = function(listaVendas, pagina){
+
+    var pagMax = 4;
+    var quantPag = Math.ceil(listaVendas.length / pagMax)
+
+    var lastValue = 0;
+    var initialValue = 0;
+
+    var pagination = "";
+    for(var x = 0; x < quantPag; x++){
+
+        lastValue = (x +1) * pagMax;
+        initialValue = lastValue - pagMax;
+        console.log(initialValue);
+        pagination += "<li class=\"page-item\" onclick='buscarVendas("+ (x + 1) + "," + initialValue + "," + pagMax + ","+ false +")'><a class=\"page-link\" href=\"#\">" + (x + 1) + "</a></li>"
+    }
+    $("#pagination").html(pagination);
+    buscarVendas(1, 0, pagMax, false)
 
 }
 
@@ -317,12 +342,7 @@ montaVendas = function (listaVendas, pagina) {
         "<th>Total vendido</th>\n" +
         "<th>Ações</th>\n" +
         "</tr>";
-    var pagMax = 4;
-    var lastValue = pagina * pagMax;
-    var initialValue = lastValue - pagMax;
-    var quantPag = Math.ceil(listaVendas.length / pagMax)
-
-        for (i = initialValue; i < lastValue; i++) {
+        for (i = 0; i < listaVendas.length; i++) {
             if(listaVendas[i] != undefined){
                 html += "<tr>" +
                     "<td>" + listaVendas[i].idVenda + "</td>" +
@@ -338,11 +358,6 @@ montaVendas = function (listaVendas, pagina) {
                 break;
             }
         }
-    var pagination = "";
-    for(x = 0; x < quantPag; x++){
-        pagination += "<li class=\"page-item\" onclick='buscarVendas("+ (x + 1) +")'><a class=\"page-link\" href=\"#\">" + (x + 1) + "</a></li>"
-    }
-    $("#pagination").html(pagination);
     return html;
 }
 
