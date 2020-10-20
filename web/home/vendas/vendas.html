@@ -33,8 +33,6 @@
             </div>
             <div class="iconsClass">
                  <img class="icons" onclick="createLine()" src="/ERP/imagens/plusIcon.jpg">
-                 <img class="icons" src="/ERP/imagens/editIcon.jpeg">
-                 <img class="icons" src="/ERP/imagens/trashIcon.png">
             </div>
         </div>
     </form>
@@ -46,3 +44,17 @@
 <div id="producsShowdown" class="modal"></div>
 
 <script>pegaDataAtual()</script>
+
+<div id="modalAlteracaoVenda" class="modal">
+    <div id="vendaAAlterar" class="form-group row">
+        <label for="idVenda" class="labelUpdateVenda">ID:</label>
+        <input type="text" class="form-control alteracaoVendaInput" id="idVenda" readonly>
+        <label for="dataVenda" class="labelUpdateVenda">Data da venda:</label>
+        <input type="text" class="form-control alteracaoVendaInput" id="dataVenda" readonly="">
+        <label for="valorTotal" class="labelUpdateVenda">Valor Total:</label>
+        <input type="text" class="form-control alteracaoVendaInput" id="valorTotal" readonly>
+        <label for="vendedor" class="labelUpdateVenda">Vendedor:</label>
+        <input type="text" class="form-control alteracaoVendaInput" id="vendedor" readonly>
+    </div>
+    <div id="produtosUpdate"></div>
+</div>

@@ -69,3 +69,10 @@ td{
     margin-left: 1px;
     cursor: pointer;
 }
+.alteracaoVendaInput{
+    width: 15%;
+    margin: 1%;
+}
+.labelUpdateVenda{
+    margin-top: 1.5%;
+}

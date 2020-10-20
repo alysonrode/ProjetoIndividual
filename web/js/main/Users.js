@@ -72,7 +72,7 @@ validaCampos = function (atualizar) {
     }
     else{
         var senhaValida = validaSenha()
-
+        user.senha = btoa(user.senha)
         if (senhaValida){
             if (atualizar){
                 registraAtualizacao(user)

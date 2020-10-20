@@ -109,9 +109,6 @@ public class VendasREST extends UtilRest {
 
         for(int i = 0; i <lista.size(); i++){
             Produto produto = new Produto();
-
-            produto.setNome(lista.get(i).replace("produto:", ""));
-            i++;
             produto.setQuantidade(Integer.parseInt(lista.get(i).replaceAll("quantidade:", "")));
             i++;
             produto.setId(Integer.parseInt(lista.get(i).replaceAll("idProduto:","")));
@@ -137,6 +134,60 @@ public class VendasREST extends UtilRest {
         return this.buildResponse(vendas);
 
     }
-    
+
+    @Path("/selecionar")
+    @POST
+    @Consumes("Application/*")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response selecionar (String idParam){
+
+        Conexao conec = new Conexao();
+        Connection conexao = conec.abrirConexao();
+        JDBCVendasDAO vendasDAO = new JDBCVendasDAO(conexao);
+
+        List<Venda> vendas = vendasDAO.search(idParam, -1,-1);
+
+        Venda venda = vendas.get(0);
+        venda.setListProduts(vendasDAO.montaProdutos(venda.getIdVenda()));
+
+        conec.fecharConexao();
+        if(venda != null){
+            return this.buildResponse(venda);
+        }
+        else{
+            return this.buildErrorResponse("Erro na seleção da venda!");
+        }
+    }
+    @Path("/update")
+    @POST
+    @Consumes("Application/*")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response update(String jsonParam){
+
+        Conexao conec = new Conexao();
+        Connection conexao = conec.abrirConexao();
+        JDBCVendasDAO vendasDAO = new JDBCVendasDAO(conexao);
+
+        ArrayList<String> stringList = prepareList(jsonParam);
+        Venda venda = new Venda();
+
+        venda.setIdVenda(Integer.parseInt(stringList.get(0)));
+        stringList.remove(0);
+        List<Produto> produtoList = new ArrayList<>();
+        for (Produto produto : prepareObjects(stringList)){
+            produto.setValor(vendasDAO.getValorProduto(produto));
+            produtoList.add(produto);
+        }
+        venda.setListProduts(produtoList);
+        venda.setValorTotal(calculaValorTotal(venda.getListProduts()));
+
+        boolean ok = vendasDAO.updateVenda(venda);
+        if(ok) {
+            return this.buildResponse("Produto atualizado com sucesso!");
+        }
+        else{
+            return this.buildErrorResponse("Erro na atualização do produto!");
+        }
+    }
     
 }

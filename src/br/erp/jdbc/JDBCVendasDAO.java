@@ -2,6 +2,7 @@ package br.erp.jdbc;
 
 import br.erp.modelo.Produto;
 import br.erp.modelo.Venda;
+import com.mysql.cj.xdevapi.Result;
 import javassist.bytecode.stackmap.BasicBlock;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -63,11 +64,12 @@ public class JDBCVendasDAO {
         try {
             for (Produto produto : venda.getListProduts()) {
                 idProduto = produto.getId();
-                sql = "insert into venda_produtos (idVenda, idProduto) values (?,?);";
+                sql = "insert into venda_produtos (idVenda, idProduto, quantidadeProduto) values (?,?,?);";
                 p = this.conec.prepareStatement(sql);
 
                 p.setInt(1, idVenda);
                 p.setInt(2, idProduto);
+                p.setInt(3, produto.getQuantidade());
 
                 p.execute();
             }
@@ -208,5 +210,63 @@ public class JDBCVendasDAO {
             return false;
         }
     }
+    public List<Produto> montaProdutos(int idVenda){
+        String sql = "select * from venda_produtos where idVenda = ?";
 
+        JDBCProdutoDAO jdbcProdutoDAO = new JDBCProdutoDAO(conec);
+        List<Produto> produtos = new ArrayList<>();
+        Produto produto = null;
+        PreparedStatement p;
+        try{
+            p = this.conec.prepareStatement(sql);
+            p.setInt(1, idVenda);
+            ResultSet rs = p.executeQuery();
+
+            while (rs.next()){
+                produto = jdbcProdutoDAO.getProductById(rs.getInt("idProduto"));
+                produto.setQuantidade(rs.getInt("quantidadeProduto"));
+                produtos.add(produto);
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return produtos;
+    }
+
+    public boolean updateVenda(Venda venda){
+        String sql = "update Vendas set valorTotal = ? where idVenda = ?";
+
+        PreparedStatement p;
+        try{
+
+            p = this.conec.prepareStatement(sql);
+            p.setDouble(1,venda.getValorTotal());
+            p.setInt(2, venda.getIdVenda());
+            p.execute();
+
+            sql = "delete from venda_produtos where idVenda = ?";
+
+            p = this.conec.prepareStatement(sql);
+            p.setInt(1, venda.getIdVenda());
+
+            p.execute();
+            for(Produto produto : venda.getListProduts()){
+                String sql2 = "insert into venda_produtos (idVenda, idProduto, quantidadeProduto) values (?,?,?);";
+                PreparedStatement p2 = this.conec.prepareStatement(sql2);
+
+                p2.setInt(1, venda.getIdVenda());
+                p2.setInt(2, produto.getId());
+                p2.setInt(3, produto.getQuantidade());
+
+                p2.execute();
+
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
 }
