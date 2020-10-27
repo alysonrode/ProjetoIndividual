@@ -82,7 +82,6 @@ public class UsuariosREST extends UtilRest {
     @Produces(MediaType.APPLICATION_JSON)
     public Response atualizaUsuario(String user){
         Usuario usuario = new Gson().fromJson(user, Usuario.class);
-        System.out.println(usuario.getEmail());
         Conexao conec = new Conexao();
         Connection conexao = conec.abrirConexao();
         JDBCUsuarioDAO jdbcUsuarioDAO = new JDBCUsuarioDAO(conexao);

@@ -224,4 +224,24 @@ public class JDBCProdutoDAO {
         return true;
     }
 
+    public boolean integridade(int id){
+        String sql = "select * from venda_produtos where idProduto = ?";
+        PreparedStatement p;
+        try{
+            p = this.conexao.prepareStatement(sql);
+            p.setInt(1, id);
+
+            ResultSet rs = p.executeQuery();
+            if(rs.next()){
+                return false;
+            }
+            else{
+                return true;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }

@@ -149,12 +149,18 @@ public class ProdutosREST extends UtilRest {
         Connection conexao = conec.abrirConexao();
         JDBCProdutoDAO jdbcProdutoDAO = new JDBCProdutoDAO(conexao);
 
-        boolean deletado = jdbcProdutoDAO.deleteProduct(id);
-        if (deletado){
-            return this.buildResponse("Produto deletado com sucesso.");
+        boolean integridade =  jdbcProdutoDAO.integridade(id);
+        if(integridade){
+            boolean deletado = jdbcProdutoDAO.deleteProduct(id);
+            if (deletado){
+                return this.buildResponse("Produto deletado com sucesso.");
+            }
+            else{
+                return this.buildErrorResponse("Erro ao deletar produto!");
+            }
         }
         else{
-            return this.buildErrorResponse("Erro ao deletar produto!");
+            return this.buildErrorResponse("O produto está vinculado à uma ou mais vendas!");
         }
     }
 }

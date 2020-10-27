@@ -269,4 +269,25 @@ public class JDBCVendasDAO {
         }
         return true;
     }
+
+    public boolean deletar(int id){
+        String sql = "delete from Vendas where idVenda = ?";
+        PreparedStatement p;
+        try{
+            p = this.conec.prepareStatement(sql);
+            p.setInt(1,id);
+            p.execute();
+
+            sql = "delete from venda_produtos where idVenda = ?";
+
+            p = this.conec.prepareStatement(sql);
+            p.setInt(1,id);
+            p.execute();
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    return true;
+    }
 }

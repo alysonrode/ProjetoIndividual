@@ -182,6 +182,8 @@ public class VendasREST extends UtilRest {
         venda.setValorTotal(calculaValorTotal(venda.getListProduts()));
 
         boolean ok = vendasDAO.updateVenda(venda);
+
+        conec.fecharConexao();
         if(ok) {
             return this.buildResponse("Produto atualizado com sucesso!");
         }
@@ -189,5 +191,24 @@ public class VendasREST extends UtilRest {
             return this.buildErrorResponse("Erro na atualização do produto!");
         }
     }
-    
+    @Path("/deletar")
+    @GET
+    @Consumes("Application/*")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deletar(@QueryParam("id") int id){
+        Conexao conec = new Conexao();
+        Connection conexao = conec.abrirConexao();
+        JDBCVendasDAO vendasDAO = new JDBCVendasDAO(conexao);
+
+        boolean ok = vendasDAO.deletar(id);
+        conec.fecharConexao();
+
+        if(ok){
+            return this.buildResponse("Venda deletada com sucesso");
+        }else{
+            return this.buildErrorResponse("Erro ao deletar venda, contate o administrador!");
+        }
+
+
+    }
 }

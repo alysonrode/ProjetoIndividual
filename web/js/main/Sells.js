@@ -75,7 +75,12 @@ moneyMask = function (valor) {
     if (!valor.includes(".")) {
         valorNovo = "R$" + valor + ".00";
     } else {
-        valorNovo = "R$" + valor;
+        var stringsplited = valor.split(".");
+        if(stringsplited[1].length == 1){
+            valorNovo = "R$" + valor + "0";
+        }else{
+            valorNovo = "R$" + valor;
+        }
     }
     return valorNovo;
 }
@@ -122,7 +127,7 @@ productLine = function (update) {
     var inputQuantidade = document.createElement('input')
     inputQuantidade.setAttribute('type', 'number')
     inputQuantidade.setAttribute('class', 'form-control')
-    inputQuantidade.setAttribute('onclick', 'calculaValor(\'inputQuantidade' + count + '\')')
+    inputQuantidade.setAttribute('onkeypress', 'calculaValor(\'inputQuantidade' + count + '\')')
     inputQuantidade.setAttribute('id', 'inputQuantidade' + count)
     inputQuantidade.setAttribute('placeholder', 'Quantidade')
     var divValorUnit = document.createElement('div')
@@ -355,7 +360,7 @@ montaVendas = function (listaVendas, pagina) {
                     "<td>" + moneyMask(listaVendas[i].valorTotal) + "</td>" +
                     "<td>" +
                     "<img class=\"iconsHistoricVendas\" onclick='alteraVenda(" + listaVendas[i].idVenda + ")' src=\"/ERP/imagens/editIcon.jpeg\">" +
-                    "<img class=\"iconsHistoricVendas\" src=\"/ERP/imagens/trashIcon.png\">" +
+                    "<img class=\"iconsHistoricVendas\" onclick='excluiVenda(" + listaVendas[i].idVenda + ")' src=\"/ERP/imagens/trashIcon.png\">" +
                     "</td>" +
                     "</tr>"
             }else{
@@ -436,7 +441,6 @@ cadastraAlteracao = function () {
         success : function (msg) {
             exibirAviso(msg)
             $("#modalAlteracaoVenda").dialog('close');
-            $("#vendaAAlterar").reset();
             buscarVendas(1, -1, -1, true);
         },
         error : function (msg) {
@@ -446,5 +450,34 @@ cadastraAlteracao = function () {
 
 }
 
+excluiVenda = function (id) {
 
+    var modalExclusao = {
+        height: 100,
+        width: 450,
+        title: "Confirmação",
+        modal: true,
+        buttons: {
+            "Sim": function () {
+                $.ajax({
+                    url:"/ERP/rest/vendas/deletar",
+                    type: "GET",
+                    data: "id="+id,
+                    success : function (msg) {
+                        exibirAviso(msg)
+                        $("#modalExclusaoVenda").dialog("close");
+                        buscarVendas(1,-1,-1, true)
+                    },
+                    error : function (msg) {
+                        exibirAviso(msg.responseText)
+                    }
+                })
+            },
+            "Não":function () {
+                $(this).dialog("close");
+            }
+        }
+    }
+    $("#modalExclusaoVenda").dialog(modalExclusao);
 
+}

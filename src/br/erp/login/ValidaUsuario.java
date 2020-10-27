@@ -66,7 +66,6 @@ public class ValidaUsuario {
             }
 
             String senhaNova = senha + hash;
-            System.out.println(senhaNova + " - " + senhaBanco);
 
             if(senhaBanco.equals(senhaNova)){
                 return true;

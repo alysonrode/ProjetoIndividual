@@ -59,11 +59,11 @@ insereMarca = function () {
             getProducts();
         },
         error : function (msg) {
-            exibirAviso(msg)
+            exibirAviso(msg.responseText)
         }
     })
 }
-montaProdutos = function (listaProdutos) {
+ montaProdutos = function (listaProdutos) {
 
     var html = "<tr>\n" +
         "<th>ID</th>\n" +
@@ -80,7 +80,7 @@ montaProdutos = function (listaProdutos) {
             "<td>" + listaProdutos[i].nome + "</td>\n" +
             "<td>" + listaProdutos[i].marca + "</td>\n" +
             "<td>" + listaProdutos[i].quantidade + "</td>\n" +
-            "<td>" + "R$" +listaProdutos[i].valor + "</td>\n" +
+            "<td>" + moneyMask(listaProdutos[i].valor) + "</td>\n" +
             "<td>\n" +
             "<img class=\"iconsHistoric\" onclick='getProductToUpdate(" + listaProdutos[i].id + ")' src=\"/ERP/imagens/editIcon.jpeg\">\n" +
             "<img class=\"iconsHistoric\" onclick='deleteProcuct(" + listaProdutos[i].id + ")' src=\"/ERP/imagens/trashIcon.png\">\n" +
@@ -143,7 +143,7 @@ updateProduct = function (Product) {
             getProducts()
         },
         error : function (msg) {
-            exibirAviso(msg)
+            exibirAviso(msg.responseText)
         }
     })
 }
@@ -164,7 +164,7 @@ deleteProcuct = function (id) {
                         getProducts()
                     },
                     error: function (msg) {
-                        exibirAviso(msg)
+                        exibirAviso(msg.responseText)
                     }
                 })
                 $(this).dialog("close")
