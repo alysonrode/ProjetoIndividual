@@ -1,1 +1,37 @@
-<h1>RELATORIOS</h1>
+<html>
+<head>
+    <meta charset="UTF-8">
+</head>
+<div>
+    <h4 style="text-align: center"> VENDAS NO </h4>
+
+    De:<input type="date" id="dataInicial">
+    Até:<input type="date" id="dataFinal">
+
+    <button type="button" onclick="getDatas()" class="btn btn-outline-dark">Emitir</button>
+    <button type="button" onclick="getDataToPDF()" class="btn btn-outline-dark" style="float: right">Gerar relatório
+    </button>
+
+</div>
+<div id="chartContainer"
+     style="margin-top: 3%; padding-left: 5%; width: 1100px; max-height: 450px; position: center; display: block">
+    <canvas id="myChart" width="1200" height="450"></canvas>
+</div>
+<div id="pdf-to-generate" style="display: none">
+
+    <h2 id="logo-relatorio"></h2>
+    <h4 id="data-relatorio-gerado"></h4>
+    <div style="display: flex; flex-direction: row">
+        <h5 id="intervalo-relatorio"></h5>
+        <h5 id="valor-total-relatorio" style="margin: auto"></h5>
+    </div>
+    <hr>
+
+    <table id="fieldset-vendas" class="table" style='color: black; border-radius: 1px'>
+
+    </table>
+
+</div>
+<script>getDatas()</script>
+</html>
+

@@ -3,6 +3,7 @@ package br.erp.rest;
 import br.erp.bd.Conexao;
 import br.erp.jdbc.JDBCUsuarioDAO;
 import br.erp.jdbc.JDBCVendasDAO;
+import br.erp.modelo.ChartData;
 import br.erp.modelo.Produto;
 import br.erp.modelo.Usuario;
 import br.erp.modelo.Venda;
@@ -211,4 +212,52 @@ public class VendasREST extends UtilRest {
 
 
     }
+    @Path("/getDataToChat")
+    @GET
+    @Consumes("Application/*")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getDataToChat(@QueryParam("from") String from, @QueryParam("to") String to){
+        if(from.equals("") && to.equals("")){
+            from = getFirstDayOfMonth();
+            to = getActualDate();
+        }
+        Conexao conec = new Conexao();
+        Connection conexao = conec.abrirConexao();
+        JDBCVendasDAO vendasDAO = new JDBCVendasDAO(conexao);
+        ChartData chartData = vendasDAO.getDateToChat(from, to);
+        conec.fecharConexao();
+
+        return this.buildResponse(chartData);
+    }
+
+    @Path("/getDataToPDF")
+    @GET
+    @Consumes("Application/*")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getDataToPDF(@QueryParam("from") String from, @QueryParam("to") String to){
+        if(from.equals("") && to.equals("")){
+            from = getFirstDayOfMonth();
+            to = getActualDate();
+        }
+        Conexao conec = new Conexao();
+        Connection conexao = conec.abrirConexao();
+        JDBCVendasDAO vendasDAO = new JDBCVendasDAO(conexao);
+        List<Venda> vendas = vendasDAO.getDateToPDF(from, to);
+        conec.fecharConexao();
+
+        return this.buildResponse(vendas);
+    }
+
+    public String getFirstDayOfMonth(){
+        Date date = new Date();
+        date.setDate(1);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        return simpleDateFormat.format(date);
+    }
+    public String getActualDate(){
+        Date date = new Date();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        return simpleDateFormat.format(date);
+    }
+
 }

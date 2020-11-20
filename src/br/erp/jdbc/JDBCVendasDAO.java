@@ -1,5 +1,6 @@
 package br.erp.jdbc;
 
+import br.erp.modelo.ChartData;
 import br.erp.modelo.Produto;
 import br.erp.modelo.Venda;
 import com.mysql.cj.xdevapi.Result;
@@ -14,6 +15,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class JDBCVendasDAO {
 
@@ -290,4 +292,68 @@ public class JDBCVendasDAO {
         }
     return true;
     }
+    public ChartData getDateToChat(String from, String to){
+
+        String sql = "SELECT Count(*) as Quantidade, dataVenda " +
+                    "FROM Vendas " +
+                    "WHERE DATE(dataVenda) BETWEEN ? AND ? group by dataVenda;";
+        PreparedStatement p;
+
+        List<String> dates = new ArrayList<>();
+        List<Integer> quantidades = new ArrayList<>();
+        ChartData chartData = new ChartData();
+        try{
+            p = this.conec.prepareStatement(sql);
+            p.setString(1, from);
+            p.setString(2, to);
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            ResultSet rs = p.executeQuery();
+            while (rs.next()){
+                quantidades.add(rs.getInt("Quantidade"));
+                dates.add(simpleDateFormat.format(rs.getDate("dataVenda")));
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+        chartData.setQuantidades(quantidades);
+        chartData.setDatas(dates);
+        return chartData;
+    }
+    public List<Venda> getDateToPDF(String from, String to){
+
+        JDBCUsuarioDAO jdbcUsuarioDAO = new JDBCUsuarioDAO(conec);
+        String sql = "SELECT * " +
+                "FROM Vendas " +
+                "WHERE DATE(dataVenda) BETWEEN ? AND ? ;";
+        PreparedStatement p;
+        List<Venda> vendas = new ArrayList<>();
+        Venda venda;
+        try{
+            p = this.conec.prepareStatement(sql);
+            p.setString(1, from);
+            p.setString(2, to);
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            ResultSet rs = p.executeQuery();
+            while (rs.next()){
+
+                venda = new Venda();
+                venda.setIdVenda(rs.getInt("idVenda"));
+                venda.setDataVenda(simpleDateFormat.format(rs.getDate("dataVenda")));
+                venda.setValorTotal(rs.getDouble("valorTotal"));
+                venda.setUsuario(jdbcUsuarioDAO.buscarPorId(rs.getInt("vendedor_id")));
+                venda.setListProduts(montaProdutos(rs.getInt("idVenda")));
+
+                vendas.add(venda);
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+        return vendas;
+    }
+
+
 }

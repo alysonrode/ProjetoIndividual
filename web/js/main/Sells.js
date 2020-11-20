@@ -210,7 +210,10 @@ pegaDataAtual = function () {
 
     dataString = day + "/" + month + "/" + today.getFullYear();
 
-    document.getElementById('staticDate').value = dataString;
+    if(document.getElementById('staticDate') != null){
+        document.getElementById('staticDate').value = dataString
+    }
+    return dataString;
 
 }
 
